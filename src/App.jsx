@@ -1,33 +1,46 @@
-import { useEffect, useState } from 'react'
-import { getAreaData } from './api'
+import { useEffect, useState } from "react";
+import { getAreaData } from "./api";
 
-import './App.css'
+import "./App.css";
 
 function App() {
+	const [areas, setAreas] = useState([]);
+	const [outcode, setOutcode] = useState("bb10");
 
-  const [areas, setAreas] = useState([]);
+	const load = async () => {
+		try {
+			const areaData = await getAreaData(outcode);
 
-  const load = async () => {
-    try {
-      const areaData = await getAreaData()
-  
-      setAreas(areaData);
-      
-    } catch (error) {
-      window.alert("todo: fix app")
-    }
-  }
+			setAreas(areaData);
+		} catch (error) {
+			window.alert("todo: fix app");
+		}
+	};
 
-  useEffect(() => {
-    load();
-  }, []);
+	function handleNewOutcode(event) {
+		event.preventDefault();
 
-  return (
-    <div className="App">
-      <h1>Postcoders</h1>
-      <h2>{`Areas for BB10: ${areas.length}`}</h2>
-    </div>
-  )
+		const newOutcode = event.target[0].value;
+		setOutcode(newOutcode);
+	}
+
+	useEffect(() => {
+		load();
+	}, [outcode]);
+
+	return (
+		<div className="App">
+			<h1>Postcoders</h1>
+			<h2>{`Areas for ${outcode}: ${areas.length}`}</h2>
+			<form onSubmit={handleNewOutcode}>
+				<input
+					type="text"
+					placeholder="Enter a new outcode as above"
+					aria-label="text input to change searched outcode e.g. “M1” rather than the full “M1 7ED”"
+				/>
+			</form>
+		</div>
+	);
 }
 
-export default App
+export default App;
