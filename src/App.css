@@ -10,3 +10,16 @@
   width: 90vw;
   border: solid grey 2px;
 }
+
+.cardContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  row-gap: 15px;
+}
+
+.card {
+  width: clamp(200px, 30%, 400px);
+  height: clamp(100px, 20%, 300px);;
+  text-align: left;
+}

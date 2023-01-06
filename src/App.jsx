@@ -1,34 +1,48 @@
-import { useEffect, useState } from 'react'
-import { getAreaData } from './api'
+import { useEffect, useCallback, useState } from "react";
+import { getAreaData } from "./api";
 
-import './App.css'
+import "./App.css";
+import CardsContainer from "./components/CardsContainer";
 
 function App() {
+	const [areas, setAreas] = useState([]);
+	const [outcode, setOutcode] = useState("BB10");
+	
+	const load = useCallback(async () => {
+		try {
+			const areaData = await getAreaData(outcode);
+			setAreas(areaData);
+		} catch (error) {
+			window.alert("todo: fix app");
+		}
+	},[outcode]);
 
-  const [areas, setAreas] = useState([]);
+	function handleNewOutcode(event) {
+		event.preventDefault();
 
-  const load = async () => {
-    try {
-      const areaData = await getAreaData()
+		const newOutcode = event.target[0].value.toUpperCase();
+		setOutcode(newOutcode);
+	}
 
-      areas.concat(areaData);
-  
-      setAreas(areas);
-    } catch (error) {
-      window.alert("todo: fix app")
-    }
-  }
+	useEffect(() => {
+		load();
+	}, [outcode]);
 
-  useEffect(() => {
-    load();
-  }, []);
-
-  return (
-    <div className="App">
-      <h1>Postcoders</h1>
-      <h2>{`Areas for BB10: ${areas.length}`}</h2>
-    </div>
-  )
+	return (
+		<div className="App">
+			<h1>Postcoders</h1>
+			<h2>{`Areas for ${outcode}: ${areas.length}`}</h2>
+			<form onSubmit={handleNewOutcode}>
+				<input
+					type="text"
+					placeholder="Enter a new outcode as above"
+					aria-label="text input to change searched outcode e.g. “M1” rather than the full “M1 7ED”"
+				/>
+				<button>Submit</button>
+			</form>
+			<CardsContainer areas={areas} />
+		</div>
+	);
 }
 
-export default App
+export default App;
