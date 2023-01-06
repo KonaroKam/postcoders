@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useCallback, useState } from "react";
 import { getAreaData } from "./api";
 
 import "./App.css";
@@ -6,22 +6,21 @@ import CardsContainer from "./components/CardsContainer";
 
 function App() {
 	const [areas, setAreas] = useState([]);
-	const [outcode, setOutcode] = useState("bb10");
-
-	const load = async () => {
+	const [outcode, setOutcode] = useState("BB10");
+	
+	const load = useCallback(async () => {
 		try {
 			const areaData = await getAreaData(outcode);
-
 			setAreas(areaData);
 		} catch (error) {
 			window.alert("todo: fix app");
 		}
-	};
+	},[outcode]);
 
 	function handleNewOutcode(event) {
 		event.preventDefault();
 
-		const newOutcode = event.target[0].value;
+		const newOutcode = event.target[0].value.toUpperCase();
 		setOutcode(newOutcode);
 	}
 
@@ -41,7 +40,7 @@ function App() {
 				/>
 				<button>Submit</button>
 			</form>
-      <CardsContainer areas={areas} />
+			<CardsContainer areas={areas} />
 		</div>
 	);
 }
