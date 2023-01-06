@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getAreaData } from "./api";
 
 import "./App.css";
+import CardsContainer from "./components/CardsContainer";
 
 function App() {
 	const [areas, setAreas] = useState([]);
@@ -38,7 +39,9 @@ function App() {
 					placeholder="Enter a new outcode as above"
 					aria-label="text input to change searched outcode e.g. “M1” rather than the full “M1 7ED”"
 				/>
+				<button>Submit</button>
 			</form>
+      <CardsContainer areas={areas} />
 		</div>
 	);
 }
